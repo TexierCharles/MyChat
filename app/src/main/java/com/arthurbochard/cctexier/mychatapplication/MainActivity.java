@@ -28,6 +28,8 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
     public static final String EXTRA_LOGIN = "ext_login";
+    public static final String EXTRA_PASSWORD = "ext_password";
+    public static final String FROM = "MainActivity";
 
     private EditText username;
     private EditText password;
@@ -154,6 +156,8 @@ public class MainActivity extends Activity {
             // Declare activity switch intent
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             intent.putExtra(EXTRA_LOGIN, username.getText().toString());
+            intent.putExtra(EXTRA_PASSWORD, password.getText().toString());
+            intent.putExtra(FROM, "MainActivity");
 
 
             // Start activity

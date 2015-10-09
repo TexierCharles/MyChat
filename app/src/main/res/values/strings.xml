@@ -14,7 +14,7 @@
     <string name="login_error">Login Failed.</string>
     <string name="title_activity_dashboard">Menu</string>
     <!-- Dashboard -->
-    <string name="welcome_msg">Hello %1$s, you look wonderful today !</string>
+    <string name="welcome_msg">Hello %1$s, your password : %1$s </string>
     <string name="title_activity_list_messages">Messages</string>
 
     <string name="hello_world">Hello world!</string>

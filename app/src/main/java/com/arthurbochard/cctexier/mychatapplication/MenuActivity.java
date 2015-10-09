@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,10 @@ public class MenuActivity extends Activity {
 
     Button button1;
     Button button2;
-    public static final String EXTRA_LOGIN2 = "ext_login";
+    public static final String EXTRA_LOGIN = "ext_login";
+    public static final String EXTRA_PASSWORD = "ext_password";
+
+
 
 
     @Override
@@ -26,23 +30,35 @@ public class MenuActivity extends Activity {
         // Retrieve views
         TextView welcomeText = (TextView) findViewById(R.id.welcome_text);
 
+        String login = "";
+        String password = "";
+
         // Retrieve login extra passed from previous activity
-        String login = getIntent().getStringExtra(MainActivity.EXTRA_LOGIN);
+        if(getIntent().getStringExtra(MainActivity.FROM)!= null)
+        {
+            login = getIntent().getStringExtra(MainActivity.EXTRA_LOGIN);
+            password = getIntent().getStringExtra(MainActivity.EXTRA_PASSWORD);
+        }
+        if(getIntent().getStringExtra(NewMessageActivity.FROM)!= null)
+        {
+            login = getIntent().getStringExtra(MainActivity.EXTRA_LOGIN);
+            password = getIntent().getStringExtra(MainActivity.EXTRA_PASSWORD);
+        }
 
         // Retrieve string from resources
-        String welcomeMsg = getString(R.string.welcome_msg, login);
+        String welcomeMsg = getString(R.string.welcome_msg, login, password);
 
         // Set welcome text into text view
         welcomeText.setText(welcomeMsg);
 
-        addListenerOnButton1(login);
-        addListenerOnButton2();
+        addListenerOnButton1(login,password);
+        addListenerOnButton2(login,password);
 
 
 
     }
 
-        public void addListenerOnButton1(final String login) {
+        public void addListenerOnButton1(final String login, final String psw) {
 
             final Context context = this;
 
@@ -54,7 +70,8 @@ public class MenuActivity extends Activity {
                 public void onClick(View arg0) {
 
                     Intent intent = new Intent(context, NewMessageActivity.class);
-                    intent.putExtra(EXTRA_LOGIN2, login);
+                    intent.putExtra(EXTRA_LOGIN, login);
+                    intent.putExtra(EXTRA_PASSWORD, psw);
                     startActivity(intent);
 
 
@@ -68,7 +85,7 @@ public class MenuActivity extends Activity {
 
 
 
-    public void addListenerOnButton2() {
+    public void addListenerOnButton2(final String login, final String psw) {
 
         final Context context = this;
 
@@ -80,6 +97,8 @@ public class MenuActivity extends Activity {
             public void onClick(View arg0) {
 
                 Intent intent = new Intent(context, ListActivity.class);
+                intent.putExtra(EXTRA_LOGIN, login);
+                intent.putExtra(EXTRA_PASSWORD, psw);
                 startActivity(intent);
 
             }

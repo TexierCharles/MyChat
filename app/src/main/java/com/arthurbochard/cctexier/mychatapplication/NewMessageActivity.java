@@ -10,13 +10,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
@@ -26,8 +29,11 @@ public class NewMessageActivity extends Activity {
     private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
     private SendMessage sendMessageTask;
     private static final String TAG = NewMessageActivity.class.getSimpleName();
+    private EditText message;
+    public static final String EXTRA_LOGIN = "ext_login";
+    public static final String EXTRA_PASSWORD = "ext_password";
+    public static final String FROM = "";
 
-    
 
 
     @Override
@@ -38,9 +44,9 @@ public class NewMessageActivity extends Activity {
         TextView welcomeText = (TextView) findViewById(R.id.from);
 
         // Retrieve login extra passed from previous activity
-        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN2);
+        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+        String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
-        Log.e("tag",login);
 
         // Retrieve string from resources
         String from = getString(R.string.from, login);
@@ -48,8 +54,25 @@ public class NewMessageActivity extends Activity {
         // Set welcome text into text view
         welcomeText.setText(from);
 
-        addListenerOnButton();
+        message = (EditText) findViewById(R.id.newMessage1);
 
+        addListenerOnButton(message);
+
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+
+        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+        String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
+
+        Intent intent = new Intent(NewMessageActivity.this, MenuActivity.class);
+        intent.putExtra(EXTRA_LOGIN, login);
+        intent.putExtra(EXTRA_PASSWORD, password);
+        intent.putExtra(FROM, "NewMessageActivity");
+        startActivity(intent);
     }
 
     @Override
@@ -76,9 +99,10 @@ public class NewMessageActivity extends Activity {
 
     }
 
-    public void addListenerOnButton() {
+    public void addListenerOnButton(EditText message) {
 
         final Context context = this;
+
 
         button = (Button) findViewById(R.id.button);
 
@@ -87,17 +111,17 @@ public class NewMessageActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                switch (arg0.getId()) {
-                    case R.id.button1:
+                        EditText message = (EditText) findViewById(R.id.newMessage1);
+                        String messageStr = message.getText().toString();
                         sendMessageTask = new SendMessage();
-                        sendMessageTask.execute("");
-                        break;
-                }
+                        sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN),getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD),messageStr);
+
+
 
                 Intent intent = new Intent(context, MenuActivity.class);
                 startActivity(intent);
+        }
 
-            }
 
 
         });
@@ -105,20 +129,35 @@ public class NewMessageActivity extends Activity {
     }
 
 
-    private class SendMessage extends AsyncTask<String, Void, String> {
+    private class SendMessage extends AsyncTask<String, Void, Boolean> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params)
+        {
             String username = params[0];
             String password = params[1];
+            String message = params[2];
 
             // Here, call the login webservice
             HttpClient client = new DefaultHttpClient();
-            String url = new StringBuilder(API_BASE_URL + "/connect/")
+
+            // Webservice URL
+            String url = new StringBuilder(API_BASE_URL + "/message/")
                     .append(username)
                     .append("/")
                     .append(password)
+                    .append("/")
+                    .append(message)
                     .toString();
+
+            Log.e("byche en string leopard",url);
+
             // Request
             try {
                 // FIXME to be removed. Simulates heavy network workload
@@ -126,32 +165,27 @@ public class NewMessageActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            HttpGet loginRequest = new HttpGet(url);
 
+
+            HttpGet loginRequest = new HttpGet(url);
             try {
                 HttpResponse response = client.execute(loginRequest);
+
+
                 if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                    return "true";
+                    return true;
                 }
             } catch (IOException e) {
                 Log.w(TAG, "Exception occured while logging in: " + e.getMessage());
             }
-            return "false";
+            return false;
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            TextView txt = (TextView) findViewById(R.id.output);
-            txt.setText("Executed"); // txt.setText(result);
-            // might want to change "executed" for the returned string passed
-            // into onPostExecute() but that is upto you
+        protected void onPostExecute(Boolean success) {
+            Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
         }
 
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
     }
 
 
