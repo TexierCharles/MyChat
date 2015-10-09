@@ -1,29 +1,31 @@
 <resources>
     <!-- Global -->
-    <string name="app_name">My Application</string>
+    <string name="app_name">MyChat</string>
     <string name="action_settings">Settings</string>
 
     <!-- Main / Login -->
-    <string name="header">Mon application</string>
-    <string name="username">Nom d\'utilisateur!</string>
-    <string name="password">Mot de passe!</string>
-    <string name="submit">Valider</string>
-    <string name="reset">Annuler</string>
+    <string name="header">MyChat</string>
+    <string name="username">user</string>
+    <string name="password">password</string>
+    <string name="submit">Log In</string>
+    <string name="reset">Cancel</string>
     <string name="form_reset">Form elements reset.</string>
     <string name="login_success">Login Successful.</string>
     <string name="login_error">Login Failed.</string>
-    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="title_activity_dashboard">Menu</string>
     <!-- Dashboard -->
     <string name="welcome_msg">Hello %1$s, you look wonderful today !</string>
-    <string name="title_activity_list_messages">ListMessagesActivity</string>
+    <string name="title_activity_list_messages">Messages</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_menu">MenuActivity</string>
-    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_menu">MyChat</string>
+    <string name="title_activity_list">Messages</string>
 
     <string name="newMessageTitle">Write a new message</string>
     <string name="ListTitle">Messages</string>
-    <string name="title_activity_new_message">NewMessageActivity</string>
+    <string name="title_activity_new_message">New Message</string>
     <string name="newMessage">Write Here</string>
     <string name="newMessage1">Your Message</string>
+
+    <string name="from">From %1$s :</string>
 </resources>

@@ -5,20 +5,48 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
+
 public class NewMessageActivity extends Activity {
 
     Button button;
+    private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
+    private SendMessage sendMessageTask;
+    private static final String TAG = NewMessageActivity.class.getSimpleName();
+
+    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
+
+        TextView welcomeText = (TextView) findViewById(R.id.from);
+
+        // Retrieve login extra passed from previous activity
+        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN2);
+
+        Log.e("tag",login);
+
+        // Retrieve string from resources
+        String from = getString(R.string.from, login);
+
+        // Set welcome text into text view
+        welcomeText.setText(from);
 
         addListenerOnButton();
 
@@ -61,7 +89,8 @@ public class NewMessageActivity extends Activity {
 
                 switch (arg0.getId()) {
                     case R.id.button1:
-                        new SendMessage().execute("");
+                        sendMessageTask = new SendMessage();
+                        sendMessageTask.execute("");
                         break;
                 }
 
@@ -80,14 +109,34 @@ public class NewMessageActivity extends Activity {
 
         @Override
         protected String doInBackground(String... params) {
-            for (int i = 0; i < 5; i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Thread.interrupted();
-                }
+            String username = params[0];
+            String password = params[1];
+
+            // Here, call the login webservice
+            HttpClient client = new DefaultHttpClient();
+            String url = new StringBuilder(API_BASE_URL + "/connect/")
+                    .append(username)
+                    .append("/")
+                    .append(password)
+                    .toString();
+            // Request
+            try {
+                // FIXME to be removed. Simulates heavy network workload
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            return "Executed";
+            HttpGet loginRequest = new HttpGet(url);
+
+            try {
+                HttpResponse response = client.execute(loginRequest);
+                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    return "true";
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Exception occured while logging in: " + e.getMessage());
+            }
+            return "false";
         }
 
         @Override

@@ -155,6 +155,7 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             intent.putExtra(EXTRA_LOGIN, username.getText().toString());
 
+
             // Start activity
             startActivity(intent);
             // If you don't want the current activity to be in the backstack,

@@ -14,6 +14,7 @@ public class MenuActivity extends Activity {
 
     Button button1;
     Button button2;
+    public static final String EXTRA_LOGIN2 = "ext_login";
 
 
     @Override
@@ -34,14 +35,14 @@ public class MenuActivity extends Activity {
         // Set welcome text into text view
         welcomeText.setText(welcomeMsg);
 
-        addListenerOnButton1();
+        addListenerOnButton1(login);
         addListenerOnButton2();
 
 
 
     }
 
-        public void addListenerOnButton1() {
+        public void addListenerOnButton1(final String login) {
 
             final Context context = this;
 
@@ -53,7 +54,11 @@ public class MenuActivity extends Activity {
                 public void onClick(View arg0) {
 
                     Intent intent = new Intent(context, NewMessageActivity.class);
+                    intent.putExtra(EXTRA_LOGIN2, login);
                     startActivity(intent);
+
+
+
 
                 }
 
