@@ -14,25 +14,48 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class NewMessageActivity extends Activity {
 
     Button button;
     private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
+    private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
     private SendMessage sendMessageTask;
     private static final String TAG = NewMessageActivity.class.getSimpleName();
     private EditText message;
+
+
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
     public static final String FROM = "";
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
 
 
 
@@ -145,39 +168,65 @@ public class NewMessageActivity extends Activity {
             String message = params[2];
 
             // Here, call the login webservice
-            HttpClient client = new DefaultHttpClient();
+            //HttpClient client = new DefaultHttpClient();
 
             // Webservice URL
-            String url = new StringBuilder(API_BASE_URL + "/message/")
+            String url = new StringBuilder(API_BASE_URL_V1 + "/messages/")
                     .append(username)
                     .append("/")
                     .append(password)
-                    .append("/")
-                    .append(message)
                     .toString();
 
             Log.e("byche en string leopard",url);
 
+            UUID uuid = UUID.randomUUID();
+            Log.i("uuid",uuid.toString());
+
             // Request
             try {
                 // FIXME to be removed. Simulates heavy network workload
-                Thread.sleep(2000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
 
-            HttpGet loginRequest = new HttpGet(url);
+            HttpPost postMessage = new HttpPost(url);
+
+            Message msg = new Message(uuid.toString(),message,username);
+
+            Gson gson = new Gson();
+            String json = gson.toJson(msg);
+
+            /*HttpEntity entity = new ByteArrayEntity(jsonarray.getBytes());
+
+            HttpParams param = new BasicHttpParams();
+
+
+            param.setParameter("uuid",uuid.toString());
+            param.setParameter("login",username);
+            param.setParameter("message", message);
+
+            postMessage.setHeader("uuid", uuid.toString());
+            postMessage.setHeader("login", username);
+            postMessage.setHeader("message", message);*/
+
+            OkHttpClient client = new OkHttpClient();
+
+
+
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
             try {
-                HttpResponse response = client.execute(loginRequest);
-
-
-                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                    return true;
-                }
+                Response response = client.newCall(request).execute();
+                return response.code()==200;
             } catch (IOException e) {
-                Log.w(TAG, "Exception occured while logging in: " + e.getMessage());
+                e.printStackTrace();
             }
+
             return false;
         }
 

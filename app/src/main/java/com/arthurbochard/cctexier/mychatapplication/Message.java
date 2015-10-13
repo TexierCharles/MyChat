@@ -34,7 +34,7 @@ public class Message {
     }
 
     public Message(String uid, String message, String login) {
-        this.uuid = uuid;
+        this.uuid = uid;
         this.message = message;
         this.login = login;
     }
