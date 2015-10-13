@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -115,7 +118,8 @@ public class ListActivity extends android.app.ListActivity {
             String password = params[1];
 
             // Here, call the login webservice
-            HttpClient client = new DefaultHttpClient();
+            //HttpClient client = new DefaultHttpClient();
+            OkHttpClient client = new OkHttpClient();
 
             // Webservice URL
             String url = new StringBuilder(API_BASE_URL_V1 + "/messages/")
@@ -135,37 +139,41 @@ public class ListActivity extends android.app.ListActivity {
             }
 
 
-            HttpGet loginRequest = new HttpGet(url);
-            try {
-                HttpResponse response = client.execute(loginRequest);
 
-                String responseStr = EntityUtils.toString(response.getEntity());
-                Log.e("Byche en String", responseStr);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+
+            String responseStrNew = null;
+            try {
+                responseStrNew = response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            Log.e("Byche en String", responseStrNew);
 
                 Type listType = new TypeToken<ArrayList<Message>>() {}.getType();
 
                 Gson gson = new Gson();
-                listMessages = gson.fromJson(responseStr,listType);
-
-                Iterator<Message> it = listMessages.iterator();
-
-                int j =0;
-                values = new String[listMessages.size()];
-
-                while(it.hasNext())
-                {
-                    String text = it.next().createText();
-                    values[j] = text;
-                    j++;
-                }
+                listMessages = gson.fromJson(responseStrNew,listType);
 
 
 
 
-            } catch (IOException e) {
-                Log.w(TAG, "Exception occured while logging in: " + e.getMessage());
-            }
-            return false;
+
+
+           return false;
         }
 
         @Override

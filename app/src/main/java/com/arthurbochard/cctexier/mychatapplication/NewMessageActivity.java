@@ -168,7 +168,7 @@ public class NewMessageActivity extends Activity {
             String message = params[2];
 
             // Here, call the login webservice
-            //HttpClient client = new DefaultHttpClient();
+            OkHttpClient client = new OkHttpClient();
 
             // Webservice URL
             String url = new StringBuilder(API_BASE_URL_V1 + "/messages/")
@@ -191,29 +191,12 @@ public class NewMessageActivity extends Activity {
             }
 
 
-            HttpPost postMessage = new HttpPost(url);
+
 
             Message msg = new Message(uuid.toString(),message,username);
 
             Gson gson = new Gson();
             String json = gson.toJson(msg);
-
-            /*HttpEntity entity = new ByteArrayEntity(jsonarray.getBytes());
-
-            HttpParams param = new BasicHttpParams();
-
-
-            param.setParameter("uuid",uuid.toString());
-            param.setParameter("login",username);
-            param.setParameter("message", message);
-
-            postMessage.setHeader("uuid", uuid.toString());
-            postMessage.setHeader("login", username);
-            postMessage.setHeader("message", message);*/
-
-            OkHttpClient client = new OkHttpClient();
-
-
 
             RequestBody body = RequestBody.create(JSON, json);
             Request request = new Request.Builder()
@@ -232,7 +215,7 @@ public class NewMessageActivity extends Activity {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Message sent successfully !", Toast.LENGTH_LONG).show();
         }
 
     }
