@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
+    private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
     public static final String FROM = "MainActivity";
@@ -114,7 +115,7 @@ public class MainActivity extends Activity {
             HttpClient client = new DefaultHttpClient();
 
             // Webservice URL
-            String url = new StringBuilder(API_BASE_URL + "/connect/")
+            String url = new StringBuilder(API_BASE_URL_V1 + "/connect/")
                     .append(username)
                     .append("/")
                     .append(password)
@@ -127,6 +128,8 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             }
             HttpGet loginRequest = new HttpGet(url);
+
+            Log.i("url",url);
 
             try {
                 HttpResponse response = client.execute(loginRequest);
