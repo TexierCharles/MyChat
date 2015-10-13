@@ -57,11 +57,13 @@ public class ListActivity extends android.app.ListActivity {
 
 
 
-    public void onReloadAdapter(String[] values)
+    public void onReloadAdapter(List<Message> values)
     {
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, values);
+        //ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, values);
 
-        setListAdapter(adapter);
+        MessageAdapter messageAdapter = new MessageAdapter(this, values);
+
+        setListAdapter(messageAdapter);
     }
 
 
@@ -168,7 +170,7 @@ public class ListActivity extends android.app.ListActivity {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            onReloadAdapter(values);
+            onReloadAdapter(listMessages);
             Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
         }
     }
