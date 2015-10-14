@@ -1,6 +1,8 @@
 package com.arthurbochard.cctexier.mychatapplication;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -8,7 +10,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.common.collect.Lists;
@@ -42,17 +48,22 @@ import java.util.List;
 public class ListActivity extends android.app.ListActivity {
 
     private Menu optionsMenu;
-    private static final String TAG = ListActivity.class.getSimpleName();
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     private List<Message> listMessages = new ArrayList<>();
 
+    public static String login="";
+    public static String password="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
-        String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+        password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
         new GetMessagesFromServer().execute(login, password);
 
@@ -65,9 +76,9 @@ public class ListActivity extends android.app.ListActivity {
         setListAdapter(messageAdapter);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         this.optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_list, menu);
@@ -83,13 +94,28 @@ public class ListActivity extends android.app.ListActivity {
         switch (item.getItemId()) {
             case R.id.messages_menuRefresh:
 
-                String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
-                String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
+                String loginX = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+                String passwordX = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
                 setRefreshActionButtonState(true);
-                new GetMessagesFromServer().execute(login, password);
+                new GetMessagesFromServer().execute(loginX, passwordX);
                 //setRefreshActionButtonState(false);
                 return true;
+
+            case android.R.id.home:
+                finish();
+                return true;
+
+            case R.id.action_new:
+                final Context context = this;
+
+                Intent intent = new Intent(context, NewMessageActivity.class);
+                intent.putExtra("login", login);
+                intent.putExtra("password", password);
+                intent.putExtra("caller","list");
+                startActivity(intent);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

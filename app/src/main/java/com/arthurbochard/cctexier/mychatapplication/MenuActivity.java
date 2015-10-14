@@ -37,8 +37,8 @@ public class MenuActivity extends Activity {
             password = getIntent().getStringExtra(MainActivity.EXTRA_PASSWORD);
         }
         if (getIntent().getStringExtra(NewMessageActivity.FROM) != null) {
-            login = getIntent().getStringExtra(MainActivity.EXTRA_LOGIN);
-            password = getIntent().getStringExtra(MainActivity.EXTRA_PASSWORD);
+            login = getIntent().getStringExtra(NewMessageActivity.EXTRA_LOGIN);
+            password = getIntent().getStringExtra(NewMessageActivity.EXTRA_PASSWORD);
         }
 
         // Retrieve string from resources
@@ -67,6 +67,7 @@ public class MenuActivity extends Activity {
                 Intent intent = new Intent(context, NewMessageActivity.class);
                 intent.putExtra(EXTRA_LOGIN, login);
                 intent.putExtra(EXTRA_PASSWORD, psw);
+                intent.putExtra("caller","menu");
                 startActivity(intent);
 
 

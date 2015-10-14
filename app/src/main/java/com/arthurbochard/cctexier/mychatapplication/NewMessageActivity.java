@@ -26,7 +26,6 @@ import java.util.UUID;
 public class NewMessageActivity extends Activity {
 
     Button button;
-    private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     private static final String TAG = NewMessageActivity.class.getSimpleName();
 
@@ -43,10 +42,27 @@ public class NewMessageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String login = "";
         // Retrieve login extra passed from previous activity
-        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
-        String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
+
+        String test1 = getIntent().getStringExtra(("caller"));
+
+
+        if(getIntent().getStringExtra(("caller")).equals("list"))
+        {
+            login = getIntent().getStringExtra(ListActivity.login);
+
+        }
+        else {
+            login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+
+        }
         String from = getString(R.string.from, login);
+
+
+
 
         TextView welcomeText = (TextView) findViewById(R.id.from);
         welcomeText.setText(from);
@@ -67,11 +83,12 @@ public class NewMessageActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case android.R.id.home:
+                finish();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
