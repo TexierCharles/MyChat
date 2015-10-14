@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -42,7 +43,7 @@ public class ListActivity extends android.app.ListActivity {
 
     private Menu optionsMenu;
     private static final String TAG = ListActivity.class.getSimpleName();
-    private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
+    private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     private List<Message> listMessages = new ArrayList<>();
 
     @Override
@@ -115,37 +116,28 @@ public class ListActivity extends android.app.ListActivity {
             String password = params[1];
 
             // Here, call the login webservice
-            //HttpClient client = new DefaultHttpClient();
+
             OkHttpClient client = new OkHttpClient();
 
-            // Webservice URL
-            String url = new StringBuilder(API_BASE_URL_V1 + "/messages/")
-                    .append(username)
-                    .append("/")
-                    .append(password)
-                    .toString();
+            String url = new StringBuilder(API_BASE_URL_V2 + "/messages?&limit=100&offset=0").toString();
 
-
-            // Request
-            try {
-                // FIXME to be removed. Simulates heavy network workload
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            String credential = Credentials.basic(username, password);
 
             Request request = new Request.Builder()
                     .url(url)
+                    .header("Authorization", credential)
                     .build();
 
             Response response = null;
             try {
                 response = client.newCall(request).execute();
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
             }
+
+            int status = response.code();
+
 
 
             String responseStrNew = null;
@@ -164,7 +156,9 @@ public class ListActivity extends android.app.ListActivity {
             //messages les plus recents en haut de la liste
             listMessages = Lists.reverse(listMessages);
 
-
+            if (status == 200) {
+                return true;
+            }
 
             return false;
         }
