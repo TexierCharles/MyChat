@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
@@ -38,11 +40,9 @@ import java.util.List;
 
 public class ListActivity extends android.app.ListActivity {
 
-
+    private Menu optionsMenu;
     private static final String TAG = ListActivity.class.getSimpleName();
-    private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
     private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
-    private String[] values = {};
     private List<Message> listMessages = new ArrayList<>();
 
     @Override
@@ -67,9 +67,11 @@ public class ListActivity extends android.app.ListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
+        this.optionsMenu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_list, menu);
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -77,13 +79,17 @@ public class ListActivity extends android.app.ListActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.messages_menuRefresh:
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+                String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
+
+                setRefreshActionButtonState(true);
+                new GetMessagesFromServer().execute(login, password);
+                //setRefreshActionButtonState(false);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -93,7 +99,7 @@ public class ListActivity extends android.app.ListActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(getApplicationContext(), "Loading messages", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Loading messages", Toast.LENGTH_LONG).show();
         }
 
        /* @Override
@@ -155,6 +161,10 @@ public class ListActivity extends android.app.ListActivity {
             Gson gson = new Gson();
             listMessages = gson.fromJson(responseStrNew, listType);
 
+            //messages les plus recents en haut de la liste
+            listMessages = Lists.reverse(listMessages);
+
+
 
             return false;
         }
@@ -162,7 +172,22 @@ public class ListActivity extends android.app.ListActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             onReloadAdapter(listMessages);
-            Toast.makeText(getApplicationContext(), "Messages loaded", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Messages loaded", Toast.LENGTH_LONG).show();
+            setRefreshActionButtonState(false);
+        }
+    }
+
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.messages_menuRefresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+                } else {
+                    refreshItem.setActionView(null);
+                }
+            }
         }
     }
 

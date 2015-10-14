@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/airport_menuRefresh"
+
+
+    <item android:id="@+id/messages_menuRefresh"
         android:icon="@drawable/refresh_icon"
         android:title="@string/action_refresh"
         android:alphabeticShortcut="r"
