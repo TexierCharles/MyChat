@@ -6,20 +6,23 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.arthurbochard.cctexier.mychatapplication.NewMessageActivity">
+    tools:context="com.arthurbochard.cctexier.mychatapplication.NewMessageActivity"
+    android:theme="@android:style/Theme.Black">
 
     <TextView
         android:id="@+id/from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/from" />
+        android:text="@string/from"
+        />
 
     <EditText
         android:id="@+id/newMessage1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/heightNewMessage"
-        android:layout_below="@+id/welcome_text"
-        android:hint="@string/newMessage" />
+        android:layout_below="@+id/from"
+        android:hint="@string/newMessage"
+        />
 
 
     <Button
@@ -28,7 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/newMessage1"
         android:layout_marginTop="@dimen/activity_vertical_marginButton"
-        android:text="Send New Message" />
+        android:text="Send New Message"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/white"/>
 
 
 

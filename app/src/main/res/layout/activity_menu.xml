@@ -12,7 +12,8 @@
         android:id="@+id/welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_msg" />
+        android:text="@string/welcome_msg"
+        android:theme="@android:style/Theme.Black"/>
 
     <Button
         android:id="@+id/button1"
@@ -20,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/welcome_text"
         android:layout_marginTop="@dimen/activity_vertical_marginButton"
-        android:text="Send New Message" />
+        android:text="Send New Message"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/white"/>
 
     <Button
         android:id="@+id/button2"
@@ -28,6 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/button1"
         android:layout_marginTop="@dimen/activity_vertical_marginButton"
-        android:text="Go To Messages" />
+        android:text="Go To Messages"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/white"/>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.arthurbochard.cctexier.mychatapplication;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -37,13 +38,19 @@ public class MainActivity extends Activity {
     private Button resetBtn;
     private Button submitBtn;
     private ProgressBar progressBar;
-
     private LoginTask loginTask;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
+
         setContentView(R.layout.activity_main);
         // Retrieve views from XML
         resetBtn = (Button) findViewById(R.id.reset_button);
