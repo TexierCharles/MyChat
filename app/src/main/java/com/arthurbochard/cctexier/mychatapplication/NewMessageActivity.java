@@ -13,16 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
+import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
-
-
 import java.io.IOException;
 import java.util.UUID;
 
@@ -30,45 +27,36 @@ public class NewMessageActivity extends Activity {
 
     Button button;
     private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
-    private SendMessage sendMessageTask;
+    private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     private static final String TAG = NewMessageActivity.class.getSimpleName();
-    private EditText message;
-
 
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
     public static final String FROM = "";
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    private SendMessage sendMessageTask;
+    private EditText message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_message);
 
-        TextView welcomeText = (TextView) findViewById(R.id.from);
-
         // Retrieve login extra passed from previous activity
         String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
         String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
-
-
-        // Retrieve string from resources
         String from = getString(R.string.from, login);
 
-        // Set welcome text into text view
+        TextView welcomeText = (TextView) findViewById(R.id.from);
         welcomeText.setText(from);
 
         message = (EditText) findViewById(R.id.newMessage1);
-
         addListenerOnButton(message);
-
     }
 
     @Override
     protected void onPause() {
-
         super.onPause();
 
         String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
@@ -99,39 +87,29 @@ public class NewMessageActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-
-
     }
 
     public void addListenerOnButton(EditText message) {
-
         final Context context = this;
 
-
         button = (Button) findViewById(R.id.button);
-
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-
                 EditText message = (EditText) findViewById(R.id.newMessage1);
                 String messageStr = message.getText().toString();
+
                 sendMessageTask = new SendMessage();
                 sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN), getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD), messageStr);
-
 
                 Intent intent = new Intent(context, MenuActivity.class);
                 startActivity(intent);
             }
-
-
         });
 
     }
-
 
     private class SendMessage extends AsyncTask<String, Void, Boolean> {
 
@@ -147,35 +125,22 @@ public class NewMessageActivity extends Activity {
             String password = params[1];
             String message = params[2];
 
-            // Here, call the login webservice
             OkHttpClient client = new OkHttpClient();
 
-            // Webservice URL
-            String url = new StringBuilder(API_BASE_URL_V1 + "/messages/")
-                    .append(username)
-                    .append("/")
-                    .append(password)
-                    .toString();
-
             UUID uuid = UUID.randomUUID();
-            Log.i("uuid", uuid.toString());
-
-            // Request
-            try {
-                // FIXME to be removed. Simulates heavy network workload
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             Message msg = new Message(uuid.toString(), message, username);
 
+            // Gson converti un objet Java dans sa représentation JSON et vice versa.
             Gson gson = new Gson();
             String json = gson.toJson(msg);
 
+            String url = new StringBuilder(API_BASE_URL_V2 + "/messages/").toString();
+
+            String credential = Credentials.basic(username, password);
             RequestBody body = RequestBody.create(JSON, json);
             Request request = new Request.Builder()
                     .url(url)
+                    .header("Authorization", credential)
                     .post(body)
                     .build();
             try {
@@ -184,7 +149,6 @@ public class NewMessageActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return false;
         }
 
@@ -192,8 +156,5 @@ public class NewMessageActivity extends Activity {
         protected void onPostExecute(Boolean success) {
             Toast.makeText(getApplicationContext(), "Message sent successfully !", Toast.LENGTH_LONG).show();
         }
-
     }
-
-
 }
