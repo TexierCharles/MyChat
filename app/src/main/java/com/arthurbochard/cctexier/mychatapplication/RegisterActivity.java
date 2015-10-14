@@ -2,12 +2,11 @@ package com.arthurbochard.cctexier.mychatapplication;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,48 +14,38 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.Credentials;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import static android.widget.Toast.LENGTH_LONG;
 
-public class MainActivity extends Activity {
+public class RegisterActivity extends Activity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
-    private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
+
+    private static final String TAG = RegisterActivity.class.getSimpleName();
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
-    public static final String FROM = "MainActivity";
+    public static final String FROM = "RegisterActivity";
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private EditText username;
     private EditText password;
     private Button resetBtn;
     private Button submitBtn;
     private ProgressBar progressBar;
-    private LoginTask loginTask;
-    private Button register;
+    private RegisterTask registerTask;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_register);
 
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -66,7 +55,6 @@ public class MainActivity extends Activity {
 
         resetBtn = (Button) findViewById(R.id.reset_button);
         submitBtn = (Button) findViewById(R.id.submit_button);
-        register = (Button) findViewById(R.id.register_button);
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -78,7 +66,7 @@ public class MainActivity extends Activity {
                 username.setText("");
                 password.setText("");
                 // Create Toast message (context, string resource, length)
-                Toast message = Toast.makeText(MainActivity.this, R.string.form_reset, LENGTH_LONG);
+                Toast message = Toast.makeText(RegisterActivity.this, R.string.form_reset, LENGTH_LONG);
                 // Show Toast message
                 message.show();
             }
@@ -90,37 +78,17 @@ public class MainActivity extends Activity {
                 String usernameStr = username.getText().toString();
                 String passwordStr = password.getText().toString();
                 // Cancel previous task if it is still running
-                if (loginTask != null && loginTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
-                    loginTask.cancel(true);
+                if (registerTask != null && registerTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+                    registerTask.cancel(true);
                 }
                 // Launch Login Task
-                loginTask = new LoginTask();
-                loginTask.execute(usernameStr, passwordStr);
-            }
-        });
-
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                registerTask = new RegisterTask();
+                registerTask.execute(usernameStr, passwordStr);
             }
         });
     }
 
-    @Override
-    protected void onPause() {
-        if (loginTask != null) {
-            loginTask.cancel(true);
-        }
-        super.onPause();
-    }
-
-    /**
-     * LoginTask: AsyncTask to process authentication.
-     * FYI: AsyncTask takes three generic types: Params, Progress, Result
-     */
-    private class LoginTask extends AsyncTask<String, Void, Boolean> {
+    private class RegisterTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -137,7 +105,7 @@ public class MainActivity extends Activity {
             String username = params[0];
             String password = params[1];
 
-            OkHttpClient client = new OkHttpClient();
+           /* OkHttpClient client = new OkHttpClient();
             // Webservice URL
             String url = new StringBuilder(API_BASE_URL_V2 + "/connect/").toString();
 
@@ -159,6 +127,26 @@ public class MainActivity extends Activity {
 
             if (status == 200) {
                 return true;
+            }*/
+
+            // using StringBuilder to avoid a lot of string creation
+            StringBuilder jsonToSend = new StringBuilder().append("{\"login\":\"").append(username).append("\",\"password\":\"").append(password).append("}");
+            String tmp = jsonToSend.toString();
+            Log.i("json to send",tmp);
+            OkHttpClient client = new OkHttpClient();
+
+            String url = new StringBuilder(API_BASE_URL_V2 + "/register").toString();
+            RequestBody body = RequestBody.create(JSON, jsonToSend.toString());
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return response.code() == 200;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return false;
         }
@@ -170,26 +158,13 @@ public class MainActivity extends Activity {
 
             // Wrong login entered
             if (!success) {
-                Toast.makeText(MainActivity.this, R.string.login_error, LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, R.string.register_error, LENGTH_LONG).show();
                 return;
             }
 
             // Everything good!
-            Toast.makeText(MainActivity.this, R.string.login_success, LENGTH_LONG).show();
-
-            // Declare activity switch intent
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            intent.putExtra(EXTRA_LOGIN, username.getText().toString());
-            intent.putExtra(EXTRA_PASSWORD, password.getText().toString());
-            intent.putExtra(FROM, "MainActivity");
-
-
-            // Start activity
-            startActivity(intent);
-            // If you don't want the current activity to be in the backstack,
-            // uncomment the following line:
-            // finish();
+            Toast.makeText(RegisterActivity.this, R.string.register_success, LENGTH_LONG).show();
+            finish();
         }
     }
-
 }
