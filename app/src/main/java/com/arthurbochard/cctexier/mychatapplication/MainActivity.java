@@ -14,6 +14,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.okhttp.Credentials;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -21,6 +28,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -29,6 +38,7 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
     private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
+    private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
     public static final String FROM = "MainActivity";
@@ -118,33 +128,28 @@ public class MainActivity extends Activity {
             String username = params[0];
             String password = params[1];
 
-            // Here, call the login webservice
-            HttpClient client = new DefaultHttpClient();
-
+            OkHttpClient client = new OkHttpClient();
             // Webservice URL
-            String url = new StringBuilder(API_BASE_URL_V1 + "/connect/")
-                    .append(username)
-                    .append("/")
-                    .append(password)
-                    .toString();
-            // Request
-            try {
-                // FIXME to be removed. Simulates heavy network workload
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            HttpGet loginRequest = new HttpGet(url);
+            String url = new StringBuilder(API_BASE_URL_V2 + "/connect/").toString();
 
-            Log.i("url", url);
+            String credential = Credentials.basic(username, password);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .header("Authorization", credential)
+                    .build();
 
+            Response response = null;
             try {
-                HttpResponse response = client.execute(loginRequest);
-                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                    return true;
-                }
+                response = client.newCall(request).execute();
             } catch (IOException e) {
-                Log.w(TAG, "Exception occured while logging in: " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
+
+            int status = response.code();
+
+            if (status == 200) {
+                return true;
             }
             return false;
         }
