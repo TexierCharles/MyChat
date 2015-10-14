@@ -56,20 +56,6 @@ public class NewMessageActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-
-        String login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
-        String password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
-
-        Intent intent = new Intent(NewMessageActivity.this, MenuActivity.class);
-        intent.putExtra(EXTRA_LOGIN, login);
-        intent.putExtra(EXTRA_PASSWORD, password);
-        intent.putExtra(FROM, "NewMessageActivity");
-        startActivity(intent);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_new_message, menu);
@@ -103,9 +89,6 @@ public class NewMessageActivity extends Activity {
 
                 sendMessageTask = new SendMessage();
                 sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN), getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD), messageStr);
-
-                Intent intent = new Intent(context, MenuActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -155,6 +138,9 @@ public class NewMessageActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean success) {
             Toast.makeText(getApplicationContext(), "Message sent successfully !", Toast.LENGTH_LONG).show();
+            if(success){
+                finish();
+            }
         }
     }
 }
