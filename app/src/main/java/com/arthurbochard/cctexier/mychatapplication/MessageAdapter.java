@@ -29,7 +29,6 @@ public class MessageAdapter extends BaseAdapter {
     }
 
 
-
     @Override
     public int getCount() {
         return listMessage.size();
@@ -57,8 +56,8 @@ public class MessageAdapter extends BaseAdapter {
         }
 
         //(2) : Récupération des TextView de notre layout
-        TextView login = (TextView)layoutItem.findViewById(R.id.login);
-        TextView message = (TextView)layoutItem.findViewById(R.id.message);
+        TextView login = (TextView) layoutItem.findViewById(R.id.login);
+        TextView message = (TextView) layoutItem.findViewById(R.id.message);
 
         //(3) : Renseignement des valeurs
         login.setText(listMessage.get(position).getLogin());

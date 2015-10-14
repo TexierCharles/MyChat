@@ -39,8 +39,7 @@ public class Message {
         this.login = login;
     }
 
-    public String createText()
-    {
+    public String createText() {
         String value = login + " : " + message;
         return value;
     }

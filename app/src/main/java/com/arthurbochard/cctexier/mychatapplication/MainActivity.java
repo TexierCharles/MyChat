@@ -123,13 +123,13 @@ public class MainActivity extends Activity {
             // Request
             try {
                 // FIXME to be removed. Simulates heavy network workload
-                Thread.sleep(2000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             HttpGet loginRequest = new HttpGet(url);
 
-            Log.i("url",url);
+            Log.i("url", url);
 
             try {
                 HttpResponse response = client.execute(loginRequest);

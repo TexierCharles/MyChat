@@ -1,6 +1,10 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.arthurbochard.cctexier.mychatapplication.ListActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/airport_menuRefresh"
+        android:icon="@drawable/Refresh_icon"
+        android:title="@string/action_refresh"
+        android:alphabeticShortcut="r"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
 </menu>
+

@@ -57,19 +57,12 @@ public class ListActivity extends android.app.ListActivity {
 
     }
 
-
-
-
-    public void onReloadAdapter(List<Message> values)
-    {
-        //ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, values);
+    public void onReloadAdapter(List<Message> values) {
 
         MessageAdapter messageAdapter = new MessageAdapter(this, values);
 
         setListAdapter(messageAdapter);
     }
-
-
 
 
     @Override
@@ -95,13 +88,12 @@ public class ListActivity extends android.app.ListActivity {
     }
 
 
-    private class GetMessagesFromServer extends AsyncTask<String, Void, Boolean>
-    {
+    private class GetMessagesFromServer extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Loading messages", Toast.LENGTH_LONG).show();
         }
 
        /* @Override
@@ -112,8 +104,7 @@ public class ListActivity extends android.app.ListActivity {
         }*/
 
         @Override
-        protected Boolean doInBackground(String... params)
-        {
+        protected Boolean doInBackground(String... params) {
             String username = params[0];
             String password = params[1];
 
@@ -129,15 +120,13 @@ public class ListActivity extends android.app.ListActivity {
                     .toString();
 
 
-
             // Request
             try {
                 // FIXME to be removed. Simulates heavy network workload
-                Thread.sleep(2000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
 
 
             Request request = new Request.Builder()
@@ -160,29 +149,22 @@ public class ListActivity extends android.app.ListActivity {
                 e.printStackTrace();
             }
 
+            Type listType = new TypeToken<ArrayList<Message>>() {
+            }.getType();
 
-            Log.e("Byche en String", responseStrNew);
-
-                Type listType = new TypeToken<ArrayList<Message>>() {}.getType();
-
-                Gson gson = new Gson();
-                listMessages = gson.fromJson(responseStrNew,listType);
+            Gson gson = new Gson();
+            listMessages = gson.fromJson(responseStrNew, listType);
 
 
-
-
-
-
-           return false;
+            return false;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
             onReloadAdapter(listMessages);
-            Toast.makeText(getApplicationContext(), "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Messages loaded", Toast.LENGTH_LONG).show();
         }
     }
-
 
 
 }

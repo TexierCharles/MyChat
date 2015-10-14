@@ -19,8 +19,6 @@ public class MenuActivity extends Activity {
     public static final String EXTRA_PASSWORD = "ext_password";
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -34,13 +32,11 @@ public class MenuActivity extends Activity {
         String password = "";
 
         // Retrieve login extra passed from previous activity
-        if(getIntent().getStringExtra(MainActivity.FROM)!= null)
-        {
+        if (getIntent().getStringExtra(MainActivity.FROM) != null) {
             login = getIntent().getStringExtra(MainActivity.EXTRA_LOGIN);
             password = getIntent().getStringExtra(MainActivity.EXTRA_PASSWORD);
         }
-        if(getIntent().getStringExtra(NewMessageActivity.FROM)!= null)
-        {
+        if (getIntent().getStringExtra(NewMessageActivity.FROM) != null) {
             login = getIntent().getStringExtra(MainActivity.EXTRA_LOGIN);
             password = getIntent().getStringExtra(MainActivity.EXTRA_PASSWORD);
         }
@@ -51,38 +47,34 @@ public class MenuActivity extends Activity {
         // Set welcome text into text view
         welcomeText.setText(welcomeMsg);
 
-        addListenerOnButton1(login,password);
-        addListenerOnButton2(login,password);
-
+        addListenerOnButton1(login, password);
+        addListenerOnButton2(login, password);
 
 
     }
 
-        public void addListenerOnButton1(final String login, final String psw) {
+    public void addListenerOnButton1(final String login, final String psw) {
 
-            final Context context = this;
+        final Context context = this;
 
-            button1 = (Button) findViewById(R.id.button1);
+        button1 = (Button) findViewById(R.id.button1);
 
-            button1.setOnClickListener(new View.OnClickListener() {
+        button1.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View arg0) {
+            @Override
+            public void onClick(View arg0) {
 
-                    Intent intent = new Intent(context, NewMessageActivity.class);
-                    intent.putExtra(EXTRA_LOGIN, login);
-                    intent.putExtra(EXTRA_PASSWORD, psw);
-                    startActivity(intent);
-
-
+                Intent intent = new Intent(context, NewMessageActivity.class);
+                intent.putExtra(EXTRA_LOGIN, login);
+                intent.putExtra(EXTRA_PASSWORD, psw);
+                startActivity(intent);
 
 
-                }
+            }
 
-            });
+        });
 
-        }
-
+    }
 
 
     public void addListenerOnButton2(final String login, final String psw) {

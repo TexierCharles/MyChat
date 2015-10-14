@@ -21,30 +21,14 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
+
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class NewMessageActivity extends Activity {
 
     Button button;
-    private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
     private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
     private SendMessage sendMessageTask;
     private static final String TAG = NewMessageActivity.class.getSimpleName();
@@ -56,7 +40,6 @@ public class NewMessageActivity extends Activity {
     public static final String FROM = "";
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-
 
 
     @Override
@@ -134,17 +117,15 @@ public class NewMessageActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                        EditText message = (EditText) findViewById(R.id.newMessage1);
-                        String messageStr = message.getText().toString();
-                        sendMessageTask = new SendMessage();
-                        sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN),getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD),messageStr);
-
+                EditText message = (EditText) findViewById(R.id.newMessage1);
+                String messageStr = message.getText().toString();
+                sendMessageTask = new SendMessage();
+                sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN), getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD), messageStr);
 
 
                 Intent intent = new Intent(context, MenuActivity.class);
                 startActivity(intent);
-        }
-
+            }
 
 
         });
@@ -157,12 +138,11 @@ public class NewMessageActivity extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Sending...", Toast.LENGTH_LONG).show();
         }
 
         @Override
-        protected Boolean doInBackground(String... params)
-        {
+        protected Boolean doInBackground(String... params) {
             String username = params[0];
             String password = params[1];
             String message = params[2];
@@ -177,10 +157,8 @@ public class NewMessageActivity extends Activity {
                     .append(password)
                     .toString();
 
-            Log.e("byche en string leopard",url);
-
             UUID uuid = UUID.randomUUID();
-            Log.i("uuid",uuid.toString());
+            Log.i("uuid", uuid.toString());
 
             // Request
             try {
@@ -190,10 +168,7 @@ public class NewMessageActivity extends Activity {
                 e.printStackTrace();
             }
 
-
-
-
-            Message msg = new Message(uuid.toString(),message,username);
+            Message msg = new Message(uuid.toString(), message, username);
 
             Gson gson = new Gson();
             String json = gson.toJson(msg);
@@ -205,7 +180,7 @@ public class NewMessageActivity extends Activity {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                return response.code()==200;
+                return response.code() == 200;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -219,10 +194,6 @@ public class NewMessageActivity extends Activity {
         }
 
     }
-
-
-
-
 
 
 }
