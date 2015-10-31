@@ -34,6 +34,8 @@ public class NewMessageActivity extends Activity {
     public static final String FROM = "";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+
+
     private SendMessage sendMessageTask;
     private EditText message;
 
@@ -44,15 +46,15 @@ public class NewMessageActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String login = "";
+
         // Retrieve login extra passed from previous activity
-
-        String test1 = getIntent().getStringExtra(("caller"));
-
+        String login = "";
+        String password = "";
 
         if(getIntent().getStringExtra(("caller")).equals("list"))
         {
-            login = getIntent().getStringExtra(ListActivity.login);
+            login = getIntent().getStringExtra(("login"));
+            password = getIntent().getStringExtra(("password"));
 
         }
         else {
@@ -105,7 +107,15 @@ public class NewMessageActivity extends Activity {
                 String messageStr = message.getText().toString();
 
                 sendMessageTask = new SendMessage();
-                sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN), getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD), messageStr);
+
+                if(getIntent().getStringExtra(("caller")).equals("list"))
+                {
+                    sendMessageTask.execute(getIntent().getStringExtra(("login")), getIntent().getStringExtra("password"), messageStr);
+
+                }
+                else {
+                    sendMessageTask.execute(getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN), getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD), messageStr);
+                }
             }
         });
 
