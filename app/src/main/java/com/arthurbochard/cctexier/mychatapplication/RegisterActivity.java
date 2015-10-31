@@ -130,7 +130,7 @@ public class RegisterActivity extends Activity {
             }*/
 
             // using StringBuilder to avoid a lot of string creation
-            StringBuilder jsonToSend = new StringBuilder().append("{\"login\":\"").append(username).append("\",\"password\":\"").append(password).append("}");
+            StringBuilder jsonToSend = new StringBuilder().append("{\"login\":\"").append(username).append("\",\"password\":\"").append(password).append("\"}");
             String tmp = jsonToSend.toString();
             Log.i("json to send",tmp);
             OkHttpClient client = new OkHttpClient();
