@@ -1,21 +1,12 @@
 package com.arthurbochard.cctexier.mychatapplication;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.JsonReader;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -25,24 +16,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ListActivity extends android.app.ListActivity {
@@ -50,7 +26,6 @@ public class ListActivity extends android.app.ListActivity {
     private Menu optionsMenu;
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     private List<Message> listMessages = new ArrayList<>();
-
     public static String login="";
     public static String password="";
 
@@ -66,13 +41,20 @@ public class ListActivity extends android.app.ListActivity {
         password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
         new GetMessagesFromServer().execute(login, password);
-
     }
 
     public void onReloadAdapter(List<Message> values) {
 
-        MessageAdapter messageAdapter = new MessageAdapter(this, values);
+        // change your login with YOU to see when it is your message.
+        for (int i=0; i < values.size(); i++)  // to avoid this loop, we should create an custom adapter. (not enough time to do it)
+        {
+            if (values.get(i).getLogin().equals(login))
+            {
+                values.get(i).setLogin("YOU");
+            }
+        }
 
+        MessageAdapter messageAdapter = new MessageAdapter(this, values);
         setListAdapter(messageAdapter);
     }
 
@@ -115,11 +97,9 @@ public class ListActivity extends android.app.ListActivity {
                 intent.putExtra("caller","list");
                 startActivity(intent);
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private class GetMessagesFromServer extends AsyncTask<String, Void, Boolean> {
 
@@ -141,8 +121,7 @@ public class ListActivity extends android.app.ListActivity {
             String username = params[0];
             String password = params[1];
 
-            // Here, call the login webservice
-
+            // call the login webservice
             OkHttpClient client = new OkHttpClient();
 
             String url = new StringBuilder(API_BASE_URL_V2 + "/messages?&limit=100&offset=0").toString();
@@ -163,9 +142,6 @@ public class ListActivity extends android.app.ListActivity {
             }
 
             int status = response.code();
-
-
-
             String responseStrNew = null;
             try {
                 responseStrNew = response.body().string();
@@ -210,6 +186,4 @@ public class ListActivity extends android.app.ListActivity {
             }
         }
     }
-
-
 }
