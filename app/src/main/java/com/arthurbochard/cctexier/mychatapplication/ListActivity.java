@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -15,6 +18,8 @@ import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -26,6 +31,8 @@ public class ListActivity extends android.app.ListActivity {
     private Menu optionsMenu;
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     private List<Message> listMessages = new ArrayList<>();
+    private SwipeRefreshLayout swipeContainer;
+
     public static String login="";
     public static String password="";
 
@@ -37,10 +44,47 @@ public class ListActivity extends android.app.ListActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                String loginX = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
+                String passwordX = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
+
+                setRefreshActionButtonState(true);
+                new GetMessagesFromServer().execute(loginX, passwordX);
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                swipeContainer.setRefreshing(false);
+
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
+
         login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
         password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
+
+
         new GetMessagesFromServer().execute(login, password);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        new GetMessagesFromServer().execute(login, password);
+
     }
 
     public void onReloadAdapter(List<Message> values) {
@@ -186,4 +230,6 @@ public class ListActivity extends android.app.ListActivity {
             }
         }
     }
+
+
 }

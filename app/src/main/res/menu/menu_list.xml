@@ -10,7 +10,7 @@
         android:showAsAction="always" />
 
     <item android:id="@+id/action_new"
-        android:icon="@drawable/new_msg"
+        android:icon="@drawable/new_msg_write"
         android:title="@string/new_msg"
         android:showAsAction="always" />
 
