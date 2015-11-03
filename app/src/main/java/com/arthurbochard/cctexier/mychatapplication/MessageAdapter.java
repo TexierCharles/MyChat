@@ -1,6 +1,7 @@
 package com.arthurbochard.cctexier.mychatapplication;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,13 +84,21 @@ public class MessageAdapter extends BaseAdapter {
         }*/
 
         RelativeLayout rl= (RelativeLayout) layoutItem.findViewById(R.id.relativeLayout);
+
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(rl.getLayoutParams());
         if (listMessage.get(position).getLogin().equals(mLogin))
         {
+            param.setMargins(600,5,5,5);
+            rl.setLayoutParams(param);
             rl.setGravity(Gravity.RIGHT);
+            rl.setBackgroundColor(Color.RED);
         }
         else
         {
+            param.setMargins(5, 5, 600, 5);
+            rl.setLayoutParams(param);
             rl.setGravity(Gravity.LEFT);
+            rl.setBackgroundColor(Color.BLUE);
         }
 
 
