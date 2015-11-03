@@ -1,11 +1,13 @@
 package com.arthurbochard.cctexier.mychatapplication;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public class MessageAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
 
+    private String mLogin;
+    private String mPassword;
 
     public MessageAdapter(Context context, List<Message> list) {
         mContext = context;
@@ -28,6 +32,14 @@ public class MessageAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(mContext);
     }
 
+    public MessageAdapter(Context context, List<Message>list, String login, String password)
+    {
+        mContext = context;
+        listMessage = list;
+        mInflater = LayoutInflater.from(mContext);
+        mLogin = login;
+        mPassword = password;
+    }
 
     @Override
     public int getCount() {
@@ -69,6 +81,17 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             layoutItem.setBackgroundColor(Color.MAGENTA);
         }*/
+
+        RelativeLayout rl= (RelativeLayout) layoutItem.findViewById(R.id.relativeLayout);
+        if (listMessage.get(position).getLogin().equals(mLogin))
+        {
+            rl.setGravity(Gravity.RIGHT);
+        }
+        else
+        {
+            rl.setGravity(Gravity.LEFT);
+        }
+
 
         //On retourne l'item créé.
         return layoutItem;

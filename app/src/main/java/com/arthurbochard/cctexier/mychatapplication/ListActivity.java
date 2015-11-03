@@ -89,16 +89,7 @@ public class ListActivity extends android.app.ListActivity {
 
     public void onReloadAdapter(List<Message> values) {
 
-        // change your login with YOU to see when it is your message.
-        for (int i=0; i < values.size(); i++)  // to avoid this loop, we should create an custom adapter. (not enough time to do it)
-        {
-            if (values.get(i).getLogin().equals(login))
-            {
-                values.get(i).setLogin("YOU");
-            }
-        }
-
-        MessageAdapter messageAdapter = new MessageAdapter(this, values);
+        MessageAdapter messageAdapter = new MessageAdapter(this, values, login, password);
         setListAdapter(messageAdapter);
     }
 
