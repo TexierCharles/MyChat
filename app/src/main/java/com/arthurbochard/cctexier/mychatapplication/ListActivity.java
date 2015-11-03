@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,9 +15,6 @@ import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
-import org.json.JSONArray;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,7 +39,6 @@ public class ListActivity extends android.app.ListActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -72,8 +65,6 @@ public class ListActivity extends android.app.ListActivity {
         login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
         password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
-
-
         new GetMessagesFromServer().execute(login, password);
 
 
@@ -89,7 +80,7 @@ public class ListActivity extends android.app.ListActivity {
 
     public void onReloadAdapter(List<Message> values) {
 
-        MessageAdapter messageAdapter = new MessageAdapter(this, values, login, password);
+        MessageAdapter messageAdapter = new MessageAdapter(this, values, login);
         setListAdapter(messageAdapter);
     }
 
@@ -141,15 +132,7 @@ public class ListActivity extends android.app.ListActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //Toast.makeText(getApplicationContext(), "Loading messages", Toast.LENGTH_LONG).show();
         }
-
-       /* @Override
-        protected void onProgressUpdate(Integer... values){
-            super.onProgressUpdate(values);
-            // Mise à jour de la ProgressBar
-           mProgressBar.setProgress(values[0]);
-        }*/
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -203,7 +186,6 @@ public class ListActivity extends android.app.ListActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             onReloadAdapter(listMessages);
-            //Toast.makeText(getApplicationContext(), "Messages loaded", Toast.LENGTH_LONG).show();
             setRefreshActionButtonState(false);
         }
     }

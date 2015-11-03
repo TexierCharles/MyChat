@@ -2,10 +2,8 @@ package com.arthurbochard.cctexier.mychatapplication;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,14 +25,10 @@ public class NewMessageActivity extends Activity {
 
     Button button;
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
-    private static final String TAG = NewMessageActivity.class.getSimpleName();
-
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
     public static final String FROM = "";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-
 
     private SendMessage sendMessageTask;
     private EditText message;
@@ -49,12 +43,9 @@ public class NewMessageActivity extends Activity {
 
         // Retrieve login extra passed from previous activity
         String login = "";
-        String password = "";
-
         if(getIntent().getStringExtra(("caller")).equals("list"))
         {
             login = getIntent().getStringExtra(("login"));
-            password = getIntent().getStringExtra(("password"));
 
         }
         else {
@@ -63,17 +54,12 @@ public class NewMessageActivity extends Activity {
         }
         String from = getString(R.string.from, login);
 
-
-
-
         TextView welcomeText = (TextView) findViewById(R.id.from);
         welcomeText.setText(from);
 
         message = (EditText) findViewById(R.id.newMessage1);
-        addListenerOnButton(message);
+        addListenerOnButton();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,7 +83,7 @@ public class NewMessageActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addListenerOnButton(EditText message) {
+    public void addListenerOnButton() {
         final Context context = this;
 
         button = (Button) findViewById(R.id.button);

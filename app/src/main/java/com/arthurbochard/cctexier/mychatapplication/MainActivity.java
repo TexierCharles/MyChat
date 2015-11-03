@@ -5,39 +5,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import static android.widget.Toast.LENGTH_LONG;
 
 public class MainActivity extends Activity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String API_BASE_URL = "http://formation-android-esaip.herokuapp.com";
-    private static final String API_BASE_URL_V1 = "http://training.loicortola.com/chat-rest/1.0";
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
@@ -175,7 +157,6 @@ public class MainActivity extends Activity {
             }
 
             // Everything good!
-            Toast.makeText(MainActivity.this, R.string.login_success, LENGTH_LONG).show();
 
             // Declare activity switch intent
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
@@ -183,12 +164,8 @@ public class MainActivity extends Activity {
             intent.putExtra(EXTRA_PASSWORD, password.getText().toString());
             intent.putExtra(FROM, "MainActivity");
 
-
-            // Start activity
             startActivity(intent);
-            // If you don't want the current activity to be in the backstack,
-            // uncomment the following line:
-            // finish();
+
         }
     }
 

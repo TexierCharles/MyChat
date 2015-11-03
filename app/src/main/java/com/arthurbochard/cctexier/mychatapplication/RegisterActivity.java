@@ -2,8 +2,6 @@ package com.arthurbochard.cctexier.mychatapplication;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -27,11 +23,7 @@ import static android.widget.Toast.LENGTH_LONG;
 public class RegisterActivity extends Activity {
 
 
-    private static final String TAG = RegisterActivity.class.getSimpleName();
     private static final String API_BASE_URL_V2 = "http://training.loicortola.com/chat-rest/2.0";
-    public static final String EXTRA_LOGIN = "ext_login";
-    public static final String EXTRA_PASSWORD = "ext_password";
-    public static final String FROM = "RegisterActivity";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private EditText username;
@@ -40,7 +32,6 @@ public class RegisterActivity extends Activity {
     private Button submitBtn;
     private ProgressBar progressBar;
     private RegisterTask registerTask;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +56,7 @@ public class RegisterActivity extends Activity {
                 // Reset username text to empty
                 username.setText("");
                 password.setText("");
-                // Create Toast message (context, string resource, length)
                 Toast message = Toast.makeText(RegisterActivity.this, R.string.form_reset, LENGTH_LONG);
-                // Show Toast message
                 message.show();
             }
         });
@@ -105,34 +94,8 @@ public class RegisterActivity extends Activity {
             String username = params[0];
             String password = params[1];
 
-           /* OkHttpClient client = new OkHttpClient();
-            // Webservice URL
-            String url = new StringBuilder(API_BASE_URL_V2 + "/connect/").toString();
-
-            String credential = Credentials.basic(username, password);
-            Request request = new Request.Builder()
-                    .url(url)
-                    .header("Authorization", credential)
-                    .build();
-
-            Response response = null;
-            try {
-                response = client.newCall(request).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-
-            int status = response.code();
-
-            if (status == 200) {
-                return true;
-            }*/
-
             // using StringBuilder to avoid a lot of string creation
             StringBuilder jsonToSend = new StringBuilder().append("{\"login\":\"").append(username).append("\",\"password\":\"").append(password).append("\"}");
-            String tmp = jsonToSend.toString();
-            Log.i("json to send",tmp);
             OkHttpClient client = new OkHttpClient();
 
             String url = new StringBuilder(API_BASE_URL_V2 + "/register").toString();

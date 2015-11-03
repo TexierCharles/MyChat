@@ -2,6 +2,7 @@ package com.arthurbochard.cctexier.mychatapplication;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,21 +26,13 @@ public class MessageAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     private String mLogin;
-    private String mPassword;
 
-    public MessageAdapter(Context context, List<Message> list) {
-        mContext = context;
-        listMessage = list;
-        mInflater = LayoutInflater.from(mContext);
-    }
-
-    public MessageAdapter(Context context, List<Message>list, String login, String password)
+    public MessageAdapter(Context context, List<Message>list, String login)
     {
         mContext = context;
         listMessage = list;
         mInflater = LayoutInflater.from(mContext);
         mLogin = login;
-        mPassword = password;
     }
 
     @Override
@@ -76,33 +69,27 @@ public class MessageAdapter extends BaseAdapter {
         login.setText(listMessage.get(position).getLogin());
         message.setText(listMessage.get(position).getMessage());
 
-        //(4) Changement de la couleur du fond de notre item
-      /*  if (mListP.get(position).genre == Personne.MASCULIN) {
-            layoutItem.setBackgroundColor(Color.BLUE);
-        } else {
-            layoutItem.setBackgroundColor(Color.MAGENTA);
-        }*/
-
         RelativeLayout rl= (RelativeLayout) layoutItem.findViewById(R.id.relativeLayout);
 
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(rl.getLayoutParams());
         if (listMessage.get(position).getLogin().equals(mLogin))
         {
-            param.setMargins(600,5,5,5);
+            param.setMargins(600, 5, 5, 5);
             rl.setLayoutParams(param);
-            rl.setGravity(Gravity.RIGHT);
-            rl.setBackgroundColor(Color.RED);
+            rl.setGravity(Gravity.END);
+            rl.setBackground(mContext.getResources().getDrawable(R.drawable.back_me));
+            //rl.setBackgroundColor(Color.rgb(215,215,215));
+
         }
         else
         {
             param.setMargins(5, 5, 600, 5);
             rl.setLayoutParams(param);
-            rl.setGravity(Gravity.LEFT);
-            rl.setBackgroundColor(Color.BLUE);
+            rl.setGravity(Gravity.START);
+            rl.setBackground(mContext.getResources().getDrawable(R.drawable.back));
+           // rl.setBackgroundColor(Color.rgb(160,160,160));
         }
 
-
-        //On retourne l'item créé.
         return layoutItem;
     }
 }

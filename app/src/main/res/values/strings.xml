@@ -4,25 +4,25 @@
     <string name="action_settings">Settings</string>
 
     <!-- Main / Login -->
-    <string name="header">MyChat</string>
+    <string name="header">MyChat Vintage Edition</string>
     <string name="username">user</string>
     <string name="password">password</string>
     <string name="submit">Log In</string>
     <string name="submitFromRegister">Register</string>
     <string name="reset">Cancel</string>
-    <string name="register">Go to register page</string>
-    <string name="form_reset">Form elements reset.</string>
+    <string name="register">Register</string>
+    <string name="form_reset">Reset</string>
     <string name="login_success">Login Successful.</string>
     <string name="login_error">Login Failed.</string>
     <string name="register_success">Register Successful.</string>
     <string name="register_error">Register Failed.</string>
     <string name="title_activity_dashboard">Menu</string>
     <!-- Dashboard -->
-    <string name="welcome_msg">Hello %1$s, welcome in the chatroom </string>
+    <string name="welcome_msg">Connected as %1$s </string>
     <string name="title_activity_list_messages">Messages</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_menu">MyChat</string>
+    <string name="title_activity_menu">MyChat Vintage Edition</string>
     <string name="title_activity_list">Messages</string>
 
     <string name="newMessageTitle">Write a new message</string>
@@ -34,5 +34,5 @@
     <string name="new_msg">New Message</string>
 
     <string name="from">From %1$s :</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">Register</string>
 </resources>

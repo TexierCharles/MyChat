@@ -9,20 +9,8 @@ public class Message {
     private String login;
     private String message;
 
-    public String getUid() {
-        return uuid;
-    }
-
-    public void setUid(String uid) {
-        this.uuid = uuid;
-    }
-
     public String getLogin() {
         return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getMessage() {
@@ -39,9 +27,5 @@ public class Message {
         this.login = login;
     }
 
-    public String createText() {
-        String value = login + " : " + message;
-        return value;
-    }
 }
 
