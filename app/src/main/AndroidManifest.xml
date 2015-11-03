@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.Activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,19 +19,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuActivity"
+            android:name=".UI.Activity.MenuActivity"
             android:label="@string/title_activity_menu" >
         </activity>
         <activity
-            android:name=".ListActivity"
+            android:name=".UI.Activity.ListActivity"
             android:label="@string/title_activity_list" >
         </activity>
         <activity
-            android:name=".NewMessageActivity"
+            android:name=".UI.Activity.NewMessageActivity"
             android:label="@string/title_activity_new_message" >
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".UI.Activity.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
     </application>

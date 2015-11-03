@@ -1,4 +1,4 @@
-package com.arthurbochard.cctexier.mychatapplication;
+package com.arthurbochard.cctexier.mychatapplication.UI.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.arthurbochard.cctexier.mychatapplication.Model.Message;
+import com.arthurbochard.cctexier.mychatapplication.R;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.MediaType;
@@ -78,7 +81,6 @@ public class NewMessageActivity extends Activity {
             case android.R.id.home:
                 finish();
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -106,7 +108,6 @@ public class NewMessageActivity extends Activity {
                 }
             }
         });
-
     }
 
     private class SendMessage extends AsyncTask<String, Void, Boolean> {
@@ -158,4 +159,5 @@ public class NewMessageActivity extends Activity {
             }
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package com.arthurbochard.cctexier.mychatapplication;
+package com.arthurbochard.cctexier.mychatapplication.UI.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,13 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.arthurbochard.cctexier.mychatapplication.R;
+
 public class MenuActivity extends Activity {
 
     Button button1;
     Button button2;
     public static final String EXTRA_LOGIN = "ext_login";
     public static final String EXTRA_PASSWORD = "ext_password";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,6 @@ public class MenuActivity extends Activity {
 
         addListenerOnButton1(login, password);
         addListenerOnButton2(login, password);
-
-
     }
 
     public void addListenerOnButton1(final String login, final String psw) {
@@ -66,14 +65,11 @@ public class MenuActivity extends Activity {
                 intent.putExtra(EXTRA_PASSWORD, psw);
                 intent.putExtra("caller","menu");
                 startActivity(intent);
-
-
             }
 
         });
 
     }
-
 
     public void addListenerOnButton2(final String login, final String psw) {
 
@@ -90,10 +86,8 @@ public class MenuActivity extends Activity {
                 intent.putExtra(EXTRA_LOGIN, login);
                 intent.putExtra(EXTRA_PASSWORD, psw);
                 startActivity(intent);
-
             }
-
         });
-
     }
+
 }

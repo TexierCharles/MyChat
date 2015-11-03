@@ -1,4 +1,4 @@
-package com.arthurbochard.cctexier.mychatapplication;
+package com.arthurbochard.cctexier.mychatapplication.UI.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import com.arthurbochard.cctexier.mychatapplication.UI.Adapter.MessageAdapter;
+import com.arthurbochard.cctexier.mychatapplication.Model.Message;
+import com.arthurbochard.cctexier.mychatapplication.R;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,7 +54,6 @@ public class ListActivity extends android.app.ListActivity {
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 swipeContainer.setRefreshing(false);
-
             }
         });
         // Configure the refreshing colors
@@ -60,14 +62,10 @@ public class ListActivity extends android.app.ListActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
-
         login = getIntent().getStringExtra(MenuActivity.EXTRA_LOGIN);
         password = getIntent().getStringExtra(MenuActivity.EXTRA_PASSWORD);
 
         new GetMessagesFromServer().execute(login, password);
-
-
     }
 
     @Override
@@ -203,6 +201,4 @@ public class ListActivity extends android.app.ListActivity {
             }
         }
     }
-
-
 }

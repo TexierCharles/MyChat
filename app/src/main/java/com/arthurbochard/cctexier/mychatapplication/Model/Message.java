@@ -1,4 +1,4 @@
-package com.arthurbochard.cctexier.mychatapplication;
+package com.arthurbochard.cctexier.mychatapplication.Model;
 
 /**
  * Created by Arthur on 13/10/15.

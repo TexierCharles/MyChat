@@ -1,4 +1,4 @@
-package com.arthurbochard.cctexier.mychatapplication;
+package com.arthurbochard.cctexier.mychatapplication.UI.Activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.arthurbochard.cctexier.mychatapplication.R;
 import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -156,8 +158,6 @@ public class MainActivity extends Activity {
                 return;
             }
 
-            // Everything good!
-
             // Declare activity switch intent
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             intent.putExtra(EXTRA_LOGIN, username.getText().toString());
@@ -165,7 +165,6 @@ public class MainActivity extends Activity {
             intent.putExtra(FROM, "MainActivity");
 
             startActivity(intent);
-
         }
     }
 

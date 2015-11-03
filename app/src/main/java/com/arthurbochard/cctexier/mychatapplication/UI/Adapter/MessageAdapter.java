@@ -1,8 +1,6 @@
-package com.arthurbochard.cctexier.mychatapplication;
+package com.arthurbochard.cctexier.mychatapplication.UI.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.arthurbochard.cctexier.mychatapplication.Model.Message;
+import com.arthurbochard.cctexier.mychatapplication.R;
 
 import java.util.List;
 
@@ -78,8 +79,6 @@ public class MessageAdapter extends BaseAdapter {
             rl.setLayoutParams(param);
             rl.setGravity(Gravity.END);
             rl.setBackground(mContext.getResources().getDrawable(R.drawable.back_me));
-            //rl.setBackgroundColor(Color.rgb(215,215,215));
-
         }
         else
         {
@@ -87,9 +86,8 @@ public class MessageAdapter extends BaseAdapter {
             rl.setLayoutParams(param);
             rl.setGravity(Gravity.START);
             rl.setBackground(mContext.getResources().getDrawable(R.drawable.back));
-           // rl.setBackgroundColor(Color.rgb(160,160,160));
         }
-
         return layoutItem;
     }
+
 }
